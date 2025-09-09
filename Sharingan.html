@@ -1,49 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
     </head>
     <body>
         <a-scene>
-        <a-sky color="#1b1a39"></a-sky>
-        <a-camera>
-        <a-cursor fuse="true" fuse-timeout="1000"></a-cursor>
-        </a-camera>
-        <a-ring id="ring" radius-outer="3.5" radius-inner="2" color="white" position="0 3 -7"
-        animation="
-        property: color;
-        from: rgb(255, 255, 255);
-        to: rgb(0, 0, 0);
-        startEvents: go
-        "
-        ></a-ring>
-        <a-circle id="circle" color="black" radius="2" position="0 3 -7"
-        animation="
-        property: color;
-        from: rgb(0, 0, 0);
-        to: rgb(255, 0, 0);
-        startEvents: go
-        "
-        ></a-circle>
-        <a-dodecahedron color="black" radius=".2" position="0 4.5 -7"></a-dodecahedron>
-        <a-dodecahedron color="black" radius=".2" position="-1.2 2.3 -7"></a-dodecahedron>
-        <a-dodecahedron color="black" radius=".2" position="1.2 2.3 -7"></a-dodecahedron>
-        <script>
-      const circle = document.querySelector('#circle');
-      const ring = document.querySelector('#ring');
-
-      // When the user looks at the circle (fuse) or hovers, trigger both animations
-      circle.addEventListener('click', () => {
-        circle.emit('go');  // animate the circle
-        ring.emit('go');    // animate the ring
-      });
-
-      // Optional: immediate trigger on hover
-      circle.addEventListener('mouseenter', () => {
-        circle.emit('go');
-        ring.emit('go');
-      });
-    </script>
+        <a-box
+            position="0 1 -5"
+            depth="2"
+            height="2"
+            width="2"
+            animation="
+                property: rotation;
+                from: 0 0 0;
+                to: 0 360 0;
+                dur: 2000;
+                easing: linear;
+                loop: true
+            "
+            color="tomato">
+        </a-box>
         </a-scene>
     </body>
 </html>
