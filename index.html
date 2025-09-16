@@ -5,7 +5,21 @@
     </head>
     <body>
         <a-scene>
-            <a-sound position="0 3 -7" src="src: url(Sharingan.mp3)" autoplay="true"></a-sound>
+            <a-assets>
+        <!-- Primary URL you gave -->
+        <!--<audio id="sharingan-audio" crossorigin="anonymous"
+               src="https://github.com/TBNRJester/Sharingan/raw/refs/heads/main/Sharingan.mp3">-->
+        </audio>
+
+        <!-- Alternate (often more CORS-friendly) raw.githubusercontent.com style:
+             Uncomment this line and comment the line above if you get CORS errors.-->
+        <audio id="sharingan-audio" crossorigin="anonymous"
+               src="https://raw.githubusercontent.com/TBNRJester/Sharingan/main/Sharingan.mp3"></audio>
+      </a-assets>
+            <a-entity id="soundEntity"
+                sound="src: #sharingan-audio; autoplay: false; loop: false; positional: true; volume: 10"
+                position="0 3 -7">
+      </a-entity>
         <a-sky color="#1b1a39"></a-sky>
         <a-camera>
         <a-cursor fuse="true" fuse-timeout="1000"></a-cursor>
@@ -18,7 +32,7 @@
         startEvents: go
         "
         ></a-ring>
-        <a-circle id="circle" color="black" radius="2" position="0 3 -7"
+        <a-circle id="speaker" color="black" radius="2" position="0 3 -7"
         animation="
         property: color;
         from: rgb(0, 0, 0);
@@ -30,20 +44,38 @@
         <a-dodecahedron color="black" radius=".2" position="-1.2 2.3 -7"></a-dodecahedron>
         <a-dodecahedron color="black" radius=".2" position="1.2 2.3 -7"></a-dodecahedron>
         <script>
-      const circle = document.querySelector('#circle');
+      const circle = document.querySelector('#speaker');
       const ring = document.querySelector('#ring');
 
       // When the user looks at the circle (fuse) or hovers, trigger both animations
-      circle.addEventListener('click', () => {
-        circle.emit('go');  // animate the circle
+      speaker.addEventListener('click', () => {
+        speaker.emit('go');  // animate the circle
         ring.emit('go');    // animate the ring
       });
 
       // Optional: immediate trigger on hover
-      circle.addEventListener('mouseenter', () => {
-        circle.emit('go');
+      speaker.addEventListener('mouseenter', () => {
+        speaker.emit('go');
         ring.emit('go');
       });
+      // Many browsers require a user gesture to start audio. We'll start on first user click.
+      const soundEntity = document.querySelector('#soundEntity');
+
+      function tryPlay() {
+        // start playing via the sound component API
+        if (!soundEntity.components.sound.isPlaying) {
+          soundEntity.components.sound.playSound();
+        }
+        // remove the listener after first gesture
+        window.removeEventListener('click', tryPlay);
+        window.removeEventListener('touchstart', tryPlay);
+      }
+
+      window.addEventListener('click', tryPlay);
+      window.addEventListener('touchstart', tryPlay);
+      document.querySelector('#speaker').addEventListener('click', () => {
+  soundEntity.components.sound.playSound();
+});
     </script>
         </a-scene>
     </body>
