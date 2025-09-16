@@ -45,39 +45,34 @@
         <a-dodecahedron color="black" radius=".2" position="-1.2 2.3 -7"></a-dodecahedron>
         <a-dodecahedron color="black" radius=".2" position="1.2 2.3 -7"></a-dodecahedron>
         <script>
-      const speaker = document.querySelector('#speaker');
-      const ring = document.querySelector('#ring');
+  const speaker = document.querySelector('#speaker');
+  const ring = document.querySelector('#ring');
+  const soundEntity = document.querySelector('#soundEntity');
 
-      // When the user looks at the circle (fuse) or hovers, trigger both animations
-      speaker.addEventListener('click', () => {
-        speaker.emit('go');  // animate the circle
-        ring.emit('go');    // animate the ring
-      });
+  // trigger animations
+  speaker.addEventListener('click', () => {
+    speaker.emit('go');
+    ring.emit('go');
+    soundEntity.components.sound.playSound();
+  });
 
-      // Optional: immediate trigger on hover
-      speaker.addEventListener('mouseenter', () => {
-        speaker.emit('go');
-        ring.emit('go');
-      });
-      // Many browsers require a user gesture to start audio. We'll start on first user click.
-      const soundEntity = document.querySelector('#soundEntity');
+  // also allow hover
+  speaker.addEventListener('mouseenter', () => {
+    speaker.emit('go');
+    ring.emit('go');
+  });
 
-      function tryPlay() {
-        // start playing via the sound component API
-        if (!soundEntity.components.sound.isPlaying) {
-          soundEntity.components.sound.playSound();
-        }
-        // remove the listener after first gesture
-        window.removeEventListener('click', tryPlay);
-        window.removeEventListener('touchstart', tryPlay);
-      }
-
-      window.addEventListener('click', tryPlay);
-      window.addEventListener('touchstart', tryPlay);
-      document.querySelector('#speaker').addEventListener('click', () => {
-  soundEntity.components.sound.playSound();
-});
-    </script>
+  // first user click starts audio (mobile-friendly)
+  function tryPlay() {
+    if (!soundEntity.components.sound.isPlaying) {
+      soundEntity.components.sound.playSound();
+    }
+    window.removeEventListener('click', tryPlay);
+    window.removeEventListener('touchstart', tryPlay);
+  }
+  window.addEventListener('click', tryPlay);
+  window.addEventListener('touchstart', tryPlay);
+</script>
         </a-scene>
     </body>
 </html>
